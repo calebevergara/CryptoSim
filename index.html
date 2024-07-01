@@ -1,19 +1,61 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>My App</title>
+    <title>Crypto Trading Simulator</title>
     <link rel="stylesheet" type="text/css" href="styles.css">
 </head>
 <body>
-    <h1>Hello, Firebase!</h1>
-    <form id="messageForm">
-        <input type="text" id="messageInput" placeholder="Enter your message">
-        <button type="submit">Submit</button>
-    </form>
-    <ul id="messageList"></ul>
+    <header>
+        <nav>
+            <ul>
+                <li><a href="#">Home</a></li>
+                <li><a href="#">Market</a></li>
+                <li><a href="#">Portfolio</a></li>
+                <li><a href="#">Leaderboard</a></li>
+                <li><a href="#">Settings</a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        <section class="welcome">
+            <h1>Welcome to Crypto Trading Simulator</h1>
+            <p>Test your trading skills with real-time market data and compete with other traders.</p>
+        </section>
+        <section class="market-overview">
+            <h2>Market Overview</h2>
+            <div class="market-data">
+                <div class="crypto">
+                    <h3>Bitcoin (BTC)</h3>
+                    <p>Price: $30,000</p>
+                    <p>Change: +3%</p>
+                </div>
+                <div class="crypto">
+                    <h3>Ethereum (ETH)</h3>
+                    <p>Price: $2,000</p>
+                    <p>Change: +2%</p>
+                </div>
+                <div class="crypto">
+                    <h3>Ripple (XRP)</h3>
+                    <p>Price: $0.50</p>
+                    <p>Change: +5%</p>
+                </div>
+            </div>
+        </section>
+        <section class="trade">
+            <h2>Place a Trade</h2>
+            <form id="tradeForm">
+                <input type="text" id="cryptoInput" placeholder="Enter cryptocurrency (e.g., BTC)">
+                <input type="number" id="amountInput" placeholder="Enter amount">
+                <button type="submit">Trade</button>
+            </form>
+        </section>
+        <section class="trades">
+            <h2>Recent Trades</h2>
+            <ul id="tradeList"></ul>
+        </section>
+    </main>
+    <footer>
+        <p>&copy; 2024 Crypto Trading Simulator. All rights reserved.</p>
+    </footer>
     <script src="/__/firebase/8.6.1/firebase-app.js"></script>
-    <script src="/__/firebase/8.6.1/firebase-firestore.js"></script>
-    <script src="/__/firebase/init.js"></script>
-    <script src="app.js"></script>
-</body>
-</html>
+    <script src="/__/firebase/8.6.1/firebase-
