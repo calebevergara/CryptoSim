@@ -1,44 +1,23 @@
-// app.js
+// Import the functions you need from the SDKs you need
+import { initializeApp } from "firebase/app";
+import { getAnalytics } from "firebase/analytics";
+// TODO: Add SDKs for Firebase products that you want to use
+// https://firebase.google.com/docs/web/setup#available-libraries
 
-// Initialize Firestore
-const db = firebase.firestore();
+// Your web app's Firebase configuration
+// For Firebase JS SDK v7.20.0 and later, measurementId is optional
+const firebaseConfig = {
+  apiKey: "AIzaSyADCqo7EBWYjwUkP_AQrF69hqA9hj4NEKc",
+  authDomain: "crypto-sim-b4794.firebaseapp.com",
+  databaseURL: "https://crypto-sim-b4794-default-rtdb.firebaseio.com",
+  projectId: "crypto-sim-b4794",
+  storageBucket: "crypto-sim-b4794.appspot.com",
+  messagingSenderId: "1038122867849",
+  appId: "1:1038122867849:web:6e5b886e778a38adbefa58",
+  measurementId: "G-6T46CTMMDK"
+};
 
-// References to the collections
-const tradesRef = db.collection('trades');
-
-// Get elements
-const tradeForm = document.getElementById('tradeForm');
-const cryptoInput = document.getElementById('cryptoInput');
-const amountInput = document.getElementById('amountInput');
-const tradeList = document.getElementById('tradeList');
-
-// Listen for form submission
-tradeForm.addEventListener('submit', (e) => {
-    e.preventDefault();
-
-    // Get input values
-    const crypto = cryptoInput.value;
-    const amount = amountInput.value;
-
-    // Add trade to Firestore
-    tradesRef.add({
-        crypto: crypto,
-        amount: parseFloat(amount),
-        timestamp: firebase.firestore.FieldValue.serverTimestamp()
-    });
-
-    // Clear input fields
-    cryptoInput.value = '';
-    amountInput.value = '';
-});
-
-// Listen for real-time updates
-tradesRef.orderBy('timestamp', 'desc').onSnapshot((snapshot) => {
-    tradeList.innerHTML = ''; // Clear the list
-    snapshot.forEach((doc) => {
-        const trade = doc.data();
-        const li = document.createElement('li');
-        li.textContent = `${trade.amount} of ${trade.crypto}`;
-        tradeList.appendChild(li);
-    });
-});
+// Initialize Firebase
+const app = initializeApp(firebaseConfig);
+const analytics = getAnalytics(app);
+  

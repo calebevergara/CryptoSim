@@ -1,43 +1,63 @@
-const express = require('express');
-const bodyParser = require('body-parser');
-const admin = require('firebase-admin');
-const serviceAccount = require('./path/to/serviceAccountKey.json'); // Update with your service account key path
+document.addEventListener('DOMContentLoaded', () => {
+    const marketDataContainer = document.getElementById('marketData');
+    const tradeForm = document.getElementById('tradeForm');
+    const tradeList = document.getElementById('tradeList');
 
-const app = express();
-const port = 3000;
+    // Sample market data. Replace this with real data fetching from your API.
+    const marketData = [
+        { id: 'bitcoin', name: 'Bitcoin', symbol: 'BTC', price: 30000, change: 3 },
+        { id: 'ethereum', name: 'Ethereum', symbol: 'ETH', price: 2000, change: 2 },
+        { id: 'ripple', name: 'Ripple', symbol: 'XRP', price: 0.5, change: 5 },
+    ];
 
-// Initialize Firebase Admin SDK
-admin.initializeApp({
-    credential: admin.credential.cert(serviceAccount)
-});
+    const portfolio = [];
 
-const db = admin.firestore();
-
-// Middleware
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: true }));
-
-// Endpoint to handle trade submissions
-app.post('/submit-trade', async (req, res) => {
-    try {
-        const { crypto, amount } = req.body;
-        const timestamp = admin.firestore.FieldValue.serverTimestamp();
-
-        // Add trade to Firestore
-        await db.collection('trades').add({
-            crypto,
-            amount: parseFloat(amount),
-            timestamp
+    const renderMarketData = () => {
+        marketDataContainer.innerHTML = '';
+        marketData.forEach(crypto => {
+            const cryptoElement = document.createElement('div');
+            cryptoElement.classList.add('crypto');
+            cryptoElement.innerHTML = `
+                <h3>${crypto.name} (${crypto.symbol})</h3>
+                <p>Price: $${crypto.price.toLocaleString()}</p>
+                <p>Change: ${crypto.change}%</p>
+            `;
+            marketDataContainer.appendChild(cryptoElement);
         });
+    };
 
-        res.status(200).send('Trade submitted successfully');
-    } catch (error) {
-        console.error('Error submitting trade:', error);
-        res.status(500).send('Error submitting trade');
-    }
-});
+    const renderTrades = () => {
+        tradeList.innerHTML = '';
+        portfolio.forEach(trade => {
+            const tradeElement = document.createElement('li');
+            tradeElement.textContent = `Traded ${trade.amount} of ${trade.symbol.toUpperCase()} at $${trade.price.toLocaleString()} each`;
+            tradeList.appendChild(tradeElement);
+        });
+    };
 
-// Start server
-app.listen(port, () => {
-    console.log(`Server is running on http://localhost:${port}`);
+    const handleTrade = (e) => {
+        e.preventDefault();
+        const cryptoInput = document.getElementById('cryptoInput').value.trim().toLowerCase();
+        const amountInput = parseFloat(document.getElementById('amountInput').value.trim());
+
+        const crypto = marketData.find(c => c.symbol.toLowerCase() === cryptoInput);
+        if (!crypto) {
+            alert('Cryptocurrency not found in market data.');
+            return;
+        }
+
+        const trade = {
+            symbol: crypto.symbol,
+            amount: amountInput,
+            price: crypto.price
+        };
+
+        portfolio.push(trade);
+        renderTrades();
+        tradeForm.reset();
+    };
+
+    tradeForm.addEventListener('submit', handleTrade);
+
+    renderMarketData();
 });
