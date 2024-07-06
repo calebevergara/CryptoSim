@@ -17,7 +17,15 @@ const firebaseConfig = {
   measurementId: "G-6T46CTMMDK"
 };
 
+const auth = firebase.auth();
+
+auth.onAuthStateChanged(user => {
+    if (!user && window.location.pathname !== '/login.html' && window.location.pathname !== '/signup.html') {
+        window.location.href = 'login.html';
+    }
+});
+
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
 const analytics = getAnalytics(app);
-  
+
